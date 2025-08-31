@@ -8,6 +8,7 @@ import axios from 'axios';
 import { setUserData } from '../redux/userSlice';
 import { toast } from 'react-toastify';
 import { RxHamburgerMenu } from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx";
 
 
 const Nav = () => {
@@ -68,6 +69,9 @@ const Nav = () => {
 
 
 </div>
+
+{/*------------------------------------------------------------ */}
+
 {/* hamburger menu for small devices */}
 <RxHamburgerMenu  
   className="w-[35px] h-[35px] lg:hidden fill-black cursor-pointer"
@@ -79,6 +83,35 @@ const Nav = () => {
     transition-transform duration-700 
     ${showHam ? "translate-x-0" : "-translate-x-full"}`}
 >
+
+  {/* cross button to close the menu */}
+ <RxCross2 
+  className="w-[35px] h-[35px] text-white absolute top-5 right-[4%] cursor-pointer"  
+  onClick={() => setShowHam(prev => !prev)} 
+/>
+
+
+
+  {/* menu items */}
+  {!userData &&  <IoPersonCircle className='w-[50px] h-[50px] fill-white cursor-pointer' />}
+
+ {/* Profile in mobile*/}
+{userData && <div className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' >
+{userData?.name.slice(0,1).toUpperCase()}
+</div> }
+{/* log out / login button */}
+<div className='w-[200px] h-[65px] border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>My Profile</div>
+
+<div className='w-[200px] h-[65px] border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>My Courses</div>
+
+{userData?.role==="educator" &&  <div className='w-[200px] h-[65px]  border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>DashBoard</div>}
+
+{/* log out / login button */}
+{userData? 
+<span className='w-[200px] h-[65px]  border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer' onClick={handleLogout} >LogOut </span> 
+:
+<span className='w-[200px] h-[65px]  border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer' onClick={()=>navigate("/login")} >Login </span> }
+
 </div>
  
       </div>
