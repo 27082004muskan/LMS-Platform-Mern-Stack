@@ -30,7 +30,7 @@ try{
 const result=await axios.post(serverUrl+"/api/auth/signup",{name:name,email:email,password:password,role:role},{withCredentials:true})
 dispatch(setUserData(result.data))
 
-navigate('/home')
+navigate('/')
 toast.success("SignUp Successfully")
 setLoading(false)
 }catch(error){

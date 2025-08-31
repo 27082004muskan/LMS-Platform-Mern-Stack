@@ -25,7 +25,7 @@ try{
 const result=await axios.post(serverUrl+"/api/auth/login",{email:email,password:password},{withCredentials:true})
 dispatch(setUserData(result.data))
 toast.success("Login Successfully")
-navigate('/home')
+navigate('/')
 }catch(error){
 console.log(error);
 setLoading(false)

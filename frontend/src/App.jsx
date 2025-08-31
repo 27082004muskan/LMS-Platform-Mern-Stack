@@ -17,7 +17,7 @@ function App() {
     <>
     <ToastContainer/>
     <Routes>
-<Route path='/home' element={<Home />} />
+<Route path='/' element={<Home />} />
 <Route path='/signup' element={<SignUp/>}/>
 <Route path='/login'element={<Login/>}/>
 
