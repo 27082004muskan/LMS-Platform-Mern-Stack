@@ -99,7 +99,7 @@ toast.error(error.response.data.message)
             </button>
 
             {/*Forgot PASSWORD BUTTON */}
-            <span className="text-[13px] cursor-pointer text-[#585757]">
+            <span className="text-[13px] cursor-pointer text-[#585757]" onClick={()=>navigate("/forget")}>
               Forgot your Password ?
             </span>
 

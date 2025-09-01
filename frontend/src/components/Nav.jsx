@@ -62,7 +62,7 @@ const Nav = () => {
 
 {/* profile , courses div*/}
 {show && <div className='absolute top-[110px] right-[15%] flex items-center justify-center gap-2 text-[16px] rounded-md bg-[white] px-[15px] py-[10px] border-[2px] border-black hover:border-white hover:text-cursor-pointer hover:bg-black'>
-  <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600' >My Profile</span>
+  <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600' onClick={()=>navigate("/profile")}>My Profile</span>
   <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600'>My Courses</span>
 </div>}
 
@@ -100,7 +100,7 @@ const Nav = () => {
 {userData?.name.slice(0,1).toUpperCase()}
 </div> }
 {/* log out / login button */}
-<div className='w-[200px] h-[65px] border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>My Profile</div>
+<div className='w-[200px] h-[65px] border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'onClick={()=>navigate("/profile")}>My Profile</div>
 
 <div className='w-[200px] h-[65px] border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>My Courses</div>
 
