@@ -56,14 +56,20 @@ const googleSignUp = async (event) => {
     console.log(response);
     
     // Handle successful sign-in
-    // const user = response.user;
-    // dispatch(setUserData(user));
-    // navigate('/');
-    // toast.success("Signed up with Google successfully!");
+    let user = response.user;
+    let name = user.displayName
+    let email=user.email
+
+
+    const result = await axios.post(serverUrl+"/api/auth/googleauth",{name , email,role},{withCredentials:true})
+    dispatch(setUserData(result.data));
+    navigate("/");
+    toast.success("Signed up with Google successfully!");
+
     
   } catch (error) {
     console.error("Google Sign-In Error:", error);
-    toast.error(error.message || "Google sign-in failed");
+    toast.error(error.response.data.message);
   }
 };
 

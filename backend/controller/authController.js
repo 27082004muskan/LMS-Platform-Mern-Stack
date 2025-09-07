@@ -208,3 +208,36 @@ export const resetPassword = async (req, res) => {
     return res.status(500).json({ message: `Reset Password error ${error.message}` }); // FIXED: error.message
   }
 };
+
+
+export const googleAuth=async(req, res)=>{
+  try {
+    const{name , email,role}=req.body
+    //email se user hai ya nhi
+    const user = await User.findOne({email})
+    //agar user nhi hai to create karana hai 
+    if(!user){
+      user=await User.create({
+        name ,
+        email,
+        role
+      })
+
+    }
+    //token generation
+    let token = genToken(user._id); // will get id of a user
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // change to true in production
+      sameSite: "lax", // using lax for better navigation
+      path: "/", // cookie accessible globally
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    // respond with user data except password
+    const { password: _, ...userData } = user._doc;
+    return res.status(200).json(userData);
+  } catch (error) {
+     return res.status(500).json({ message: `Google auth error ${error.message}` }); // FIXED: error.message
+  }
+}

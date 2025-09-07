@@ -9,6 +9,8 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../../utils/firebase";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -32,6 +34,34 @@ setLoading(false)
 toast.error(error.response.data.message)
 }
   }
+
+  const googleLogin = async (event) => {
+  event.preventDefault();
+  // event.stopPropagation();
+  // setLoading(true);
+  
+  try {
+    const response = await signInWithPopup(auth, provider);
+    console.log(response);
+    
+    // Handle successful sign-in
+    let user = response.user;
+    let name = user.displayName
+    let email=user.email
+    let role=""
+
+
+    const result = await axios.post(serverUrl+"/api/auth/googleauth",{name , email,role},{withCredentials:true})
+    dispatch(setUserData(result.data));
+    navigate("/");
+    toast.success("Login Successfully");
+
+    
+  } catch (error) {
+    console.error("Google Sign-In Error:", error);
+    toast.error(error.response.data.message);
+  }
+};
 
   return (
     <div>
@@ -110,7 +140,7 @@ toast.error(error.response.data.message)
               <div className="w-[25%] h-[0.5px] bg-[#c4c4c4] "></div>
             </div>
 
-            <div className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center">
+            <div className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center" onClick={googleLogin}>
               <img src={Google} className="w-[25px]" alt="Google" />
               <span className="text-[18px] text-gray-500">oogle</span>
             </div>
