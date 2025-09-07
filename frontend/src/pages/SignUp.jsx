@@ -10,10 +10,14 @@ import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../../utils/firebase";
+
 
 
 
 const SignUp = () => {
+
 
     const[show,setShow]=useState(false)
     const navigate =useNavigate()
@@ -24,11 +28,13 @@ const SignUp = () => {
     const [loading , setLoading]=useState(false);
     const dispatch = useDispatch();
 
+
     const handleSignUp = async()=>{
       setLoading(true)
 try{
 const result=await axios.post(serverUrl+"/api/auth/signup",{name:name,email:email,password:password,role:role},{withCredentials:true})
 dispatch(setUserData(result.data))
+
 
 navigate('/')
 toast.success("SignUp Successfully")
@@ -40,12 +46,36 @@ toast.error(error.response.data.message)
 }
     }
 
+const googleSignUp = async (event) => {
+  event.preventDefault();
+  // event.stopPropagation();
+  // setLoading(true);
+  
+  try {
+    const response = await signInWithPopup(auth, provider);
+    console.log(response);
+    
+    // Handle successful sign-in
+    // const user = response.user;
+    // dispatch(setUserData(user));
+    // navigate('/');
+    // toast.success("Signed up with Google successfully!");
+    
+  } catch (error) {
+    console.error("Google Sign-In Error:", error);
+    toast.error(error.message || "Google sign-in failed");
+  }
+};
+
+
+
   return (
     <div>
       {/* bg ,width , height    */}
       <div className="bg-[#dddbdb] w-[100vw] h-[100vh] flex justify-center items-center gap-3">
         {/* md=mid devices */}
         <form className="w-[90%] md:w-200 h-150 bg-white shadow-xl rounded-2xl flex" onSubmit={(e)=>e.preventDefault()}>
+
 
           {/*left div*/}
           <div className="md:w-[50%] w-[100%] h-[100%] flex flex-col items-center justify-center gap-3">
@@ -54,17 +84,20 @@ toast.error(error.response.data.message)
             <h2 className="text-[#999797] text-[18px]">Create your account</h2>
         </div>
 
+
         {/* input fields-NAME  */}
         <div className="flex flex-col gap-1 w-[80%] items-start justify-center px-3">
             <label htmlFor="name" className="font-semibold">Name</label>
             <input id="name" type="text" className="border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]" placeholder='Your name' onChange={(e)=> setName(e.target.value)} value={name} />
         </div>
 
+
 {/* input fields-E-MAIL  */}
           <div className="flex flex-col gap-1 w-[80%] items-start justify-center px-3">
             <label htmlFor="email" className="font-semibold">E-mail </label>
             <input id="email" type="email" className="border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]" placeholder='Your email' onChange={(e)=> setEmail(e.target.value)} value={email}/>
         </div>
+
 
 {/* input fields-PASSWORD  */}
           <div className="flex flex-col gap-1 w-[80%] items-start justify-center px-3 relative" >
@@ -73,20 +106,26 @@ toast.error(error.response.data.message)
             {!show ? 
             <FaRegEyeSlash className="absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]" onClick={()=>setShow(prev=>!prev)}/> :
 
+
             <FaEye className="absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]" onClick={()=>setShow(prev=>!prev)}/>  }
+
 
         </div>
         
+
 
             {/* two options - STUDENT & EDUCATOR */}
 <div className="flex md:w-[50%] w-[70%] items-center justify-between">
 <span className={`px-[10px] py-[5px] border-[2px] border-[#e7e6e6] rounded-xl cursor-pointer hover:border-black ${role==="student"?"border-black":"border-[#646464]"}`} onClick={()=>setRole("student")}>Student</span>
 
 
+
 <span className={`px-[10px] py-[5px] border-[2px] border-[#e7e6e6] rounded-xl cursor-pointer hover:border-black ${role==="educator"?"border-black":"border-[#646464]"}`} onClick={()=>setRole("educator")} >Educator</span>
 </div>
 
+
             {/* SIGN UP BUTTON */}
+
 
 <button className="w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]" onClick={handleSignUp} disabled={loading} >{loading ? <ClipLoader size={30} color="white" />:
 " SignUp"} </button>
@@ -98,10 +137,17 @@ toast.error(error.response.data.message)
  <div className="w-[25%] h-[0.5px] bg-[#c4c4c4] "></div>
 </div>
 
-<div className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center">
+
+<button 
+  type="button"
+  className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center cursor-pointer bg-white hover:bg-gray-50" 
+  onClick={googleSignUp}
+  disabled={loading}
+>
     <img src={Google} className="w-[25px]" alt="Google"/>
     <span className="text-[18px] text-gray-500">oogle</span>
-    </div>
+</button>
+
 
 <div className="text-[#6f6f6f]">Already have an account ?
   <span 
@@ -111,7 +157,9 @@ toast.error(error.response.data.message)
     </div>
 
 
+
           </div>
+
 
           {/*right div*/}
           <div className="w-[50%] h-[100%] rounded-r-2xl bg-[black]  md:flex items-center justify-center flex-col hidden">
@@ -127,5 +175,6 @@ toast.error(error.response.data.message)
     </div>
   );
 };
+
 
 export default SignUp;
