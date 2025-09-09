@@ -74,7 +74,7 @@ const Nav = () => {
 
 {/* hamburger menu for small devices */}
 <RxHamburgerMenu  
-  className="w-[35px] h-[35px] lg:hidden fill-black cursor-pointer"
+  className="w-[35px] h-[35px] lg:hidden text-white fill-black cursor-pointer"
   onClick={() => setShowHam(prev => !prev)}
 />
 
