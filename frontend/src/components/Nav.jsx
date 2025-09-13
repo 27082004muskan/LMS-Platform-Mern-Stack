@@ -46,8 +46,10 @@ const Nav = () => {
 
 {!userData &&  <IoPersonCircle className='w-[50px] h-[50px] fill-black cursor-pointer' onClick={()=>setShow(prev=>!prev)}/>}
 
- {/* the one who login will get it's name letter on profile */}
-{userData && <div className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' onClick={()=>setShow(prev=>!prev)} >
+ {/* the one who login will get it's name letter on profile */} 
+ {/* photo URL bhi lagega */}
+{userData?.photoUrl ? <img src={userData?.photoUrl}  className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer'onClick={()=>setShow(prev=>!prev)} /> :
+<div className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' onClick={()=>setShow(prev=>!prev)} >
 {userData?.name.slice(0,1).toUpperCase()}
 
 </div> }
@@ -96,7 +98,8 @@ const Nav = () => {
   {!userData &&  <IoPersonCircle className='w-[50px] h-[50px] fill-white cursor-pointer' />}
 
  {/* Profile in mobile*/}
-{userData && <div className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' >
+{userData?.photoUrl ? <img src={userData?.photoUrl
+} className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer'/>: <div className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' >
 {userData?.name.slice(0,1).toUpperCase()}
 </div> }
 {/* log out / login button */}
