@@ -54,7 +54,7 @@ const Nav = () => {
 
 </div> }
 {/* dashboard button */}
-{userData?.role==="educator" &&  <div className='px-[20px] py-[10px] border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer'>DashBoard</div>}
+{userData?.role==="educator" &&  <div className='px-[20px] py-[10px] border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer' onClick={()=>navigate("/dashboard")}>DashBoard</div>}
 
 {/* log out / login button */}
 {userData? 
@@ -107,7 +107,7 @@ const Nav = () => {
 
 <div className='w-[200px] h-[65px] border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>My Courses</div>
 
-{userData?.role==="educator" &&  <div className='w-[200px] h-[65px]  border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'>DashBoard</div>}
+{userData?.role==="educator" &&  <div className='w-[200px] h-[65px]  border-2 border-white text-white bg-[black] flex items-center justify-center rounded-[10px] text-[18px] font-light cursor-pointer'onClick={()=>navigate("/dashboard")}>DashBoard</div>}
 
 {/* log out / login button */}
 {userData? 
