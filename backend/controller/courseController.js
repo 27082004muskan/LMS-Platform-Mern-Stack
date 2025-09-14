@@ -60,27 +60,46 @@ export const editCourse= async(req, res)=>{
     try {
         const {courseId}=req.params
         const {title , subTitle,description,category,level , isPublished,price }=req.body
-          // for thumbnail checking on cloudinary
+          
+        // for thumbnail checking on cloudinary
         let thumbnail
         if(req.file){
-            thumbnail= await uploadOnCloudinary(req.file.path)
+            const cloudinaryResult = await uploadOnCloudinary(req.file.path)
+            // Extract ONLY the secure_url string, not the entire object
+            thumbnail = cloudinaryResult ? cloudinaryResult.secure_url : undefined
         }
+        
         let course = await Course.findById(courseId)
         if(!course){
             return res.status(400).json({message:"Course not found"})
+        }
         
-    }
-    const updateData = {title , subTitle,description,category,level , isPublished,price,thumbnail}
+        // Only include thumbnail in updateData if it exists
+        const updateData = {
+            title, 
+            subTitle,
+            description,
+            category,
+            level, 
+            isPublished,
+            price
+        }
+        
+        // Add thumbnail only if it was uploaded
+        if(thumbnail) {
+            updateData.thumbnail = thumbnail
+        }
 
-    course = await Course.findByIdAndUpdate(courseId , updateData,{new:true})
+        course = await Course.findByIdAndUpdate(courseId , updateData,{new:true})
 
-    return res.status(200).json(course)
+        return res.status(200).json(course)
     } catch (error) {
         return res.status(500).json({
-      message: `Failed to edit Creator Course ${error}`
-    })
+            message: `Failed to edit Creator Course ${error}`
+        })
     }
 }
+
 
 export const getCourseById = async(req,res)=>{
     try {

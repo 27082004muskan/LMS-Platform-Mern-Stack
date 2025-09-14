@@ -9,7 +9,8 @@ const courseRouter = express.Router()
 courseRouter.post("/create",isAuth, createCourse)
 courseRouter.get("/getpublished",getPublishedCourse)
 courseRouter.get("/getcreator",isAuth ,getCreatorCourse)
-courseRouter.post("editcourse/:courseId",isAuth,upload.single("thumbnail"),editCourse)
+courseRouter.post("/editcourse/:courseId", isAuth, upload.single("thumbnail"), editCourse)
+
 courseRouter.get("/getcoursebyid/:courseId",isAuth,getCourseById)
 courseRouter.delete("/remove/:courseId",isAuth,removeCourse)
 
