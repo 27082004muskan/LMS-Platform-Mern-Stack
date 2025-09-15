@@ -8,8 +8,10 @@ import { TbBrandOpenai } from "react-icons/tb";
 import { SiGoogledataproc } from "react-icons/si";
 import { FaClipboardList } from "react-icons/fa";
 import { SiWeb3Dotjs } from "react-icons/si";
+import { useNavigate } from 'react-router-dom';
 
 const ExploreCourses = () => {
+  const navigate = useNavigate()
   return (
     <div className='w-[100vw] min-h-[50vh] lg:h-[50vh] flex flex-col lg:flex-row items-center justify-center gap-4 px-[30px]'>
       
@@ -20,7 +22,7 @@ const ExploreCourses = () => {
       <span className='text-[35px] font-semibold'>Explore</span>
       <span className='text-[35px] font-semibold'>Our Courses</span>
       <p className='text-[17px]'> Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta explicabo voluptate suscipit animi ipsum nulla, inventore aspernatur, pariatur temporibus neque rem architecto? Sed repellat ipsam molestias quae iure velit a!</p>
-      <button className='px-[20px] py-[10px] border-2 bg-[black] border-white text-white rounded-[10px] text-[18px] font-light flex gap-2 mt-[40px] cursor-pointer'>Explore Courses
+      <button className='px-[20px] py-[10px] border-2 bg-[black] border-white text-white rounded-[10px] text-[18px] font-light flex gap-2 mt-[40px] cursor-pointer'  onClick={()=>navigate("/allcourses")}>Explore Courses
         <SiViaplay className='w-[30px] h-[30px] lg:fill-white fill-black' />
       </button>
 
