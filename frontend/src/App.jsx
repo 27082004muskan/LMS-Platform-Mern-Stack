@@ -18,7 +18,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile.jsx';
 import SignUp from "./pages/SignUp";
 
-
+export const serverUrl = "https://lms-backend-eeik.onrender.com";
 
 function App() {
  // Call hooks inside the component
