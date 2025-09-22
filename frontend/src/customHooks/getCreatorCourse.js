@@ -1,31 +1,46 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import { serverUrl } from '../App'
-import { useDispatch, useSelector } from 'react-redux'
-import { setCreatorCourseData } from '../redux/courseSlice'
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { serverUrl } from '../App';
+import { setCreatorCourseData } from '../redux/courseSlice';
 
-
-const getCreatorCourse = () => {
+const useGetCreatorCourses = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-    const dispatch=useDispatch()
+  const dispatch = useDispatch();
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const {userData} = useSelector(state=>state.user)
+  const { userData } = useSelector(state => state.user);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const fetchCreatorCourses = async () => {
+      // Only fetch if user is authenticated
+      if (!userData || !userData._id) {
+        console.log('User not authenticated, skipping creator courses fetch');
+        return;
+      }
 
-  return (  // eslint-disable-next-line react-hooks/rules-of-hooks
-   useEffect(()=>{
-const creatorCourses = async()=>{
-    try {
-        const result = await axios.get(serverUrl+"/api/course/getcreator",{withCredentials:true})
-        console.log(result.data)
-        dispatch(setCreatorCourseData(result.data))
-    } catch (error) {
-        console.log(error)
-       
-}
-}
-creatorCourses()
-   },[dispatch, userData])
-  )
-}
+      try {
+        // Use withCredentials for cookie-based authentication
+        const result = await axios.get(`${serverUrl}/api/course/getcreator`, {
+          withCredentials: true
+        });
+        console.log('Creator courses:', result.data);
+        dispatch(setCreatorCourseData(result.data));
+        
+      } catch (error) {
+        console.error('Error fetching creator courses:', error);
+        
+        if (error.response?.status === 401) {
+          console.log('Authentication failed, user may need to login again');
+          // Clear any stored data and redirect to login
+          dispatch(setCreatorCourseData([]));
+        } else {
+          console.log('Error fetching courses:', error.message);
+        }
+      }
+    };
 
-export default getCreatorCourse
+    fetchCreatorCourses();
+  }, [dispatch, userData]);
+};
+
+export default useGetCreatorCourses;

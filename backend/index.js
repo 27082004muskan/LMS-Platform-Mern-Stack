@@ -7,36 +7,50 @@ import cors from 'cors';
 import userRouter from './route/userRoute.js';
 import courseRouter from './route/courseRoute.js';
 
-dotenv.config();    //to read .env file
+dotenv.config();
 
-const port = process.env.PORT || 8000;  //|| 8000
-
+const port = process.env.PORT || 8000;
 const app = express();
 
-app.use(express.json())  //middleware to parse json data
-app.use(cookieParser())   //middleware to parse cookies
-app.use(cors({
-    origin: ['http://localhost:5173', 'https://your-frontend-domain.vercel.app'], 
-    credentials: true
-})) //middleware to allow cross-origin requests
+app.use(express.json())
+app.use(cookieParser())
 
-app.use("/api/auth", authRouter);  // calling auth router from route folder whose controller is defined in controller folder
+// REPLACE THIS ENTIRE SECTION ⬇️
+// OLD CODE TO REMOVE:
+// app.use(cors({
+//     origin: ['http://localhost:5173', 'https://your-frontend-domain.vercel.app'], 
+//     credentials: true
+// }))
+
+// NEW CODE TO ADD:
+const allowedOrigins = [
+    process.env.FRONTEND_URL_LOCAL,
+    process.env.FRONTEND_URL_VITE,
+    process.env.FRONTEND_URL_PROD
+].filter(Boolean);
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}))
+// REPLACE SECTION ENDS HERE ⬆️
+
+app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter); 
-app.use("/api/course", courseRouter);  // 
+app.use("/api/course", courseRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 })
 
-// Connect to database immediately
 connectDb();
 
-// Export the app as default export for Vercel serverless deployment
 export default app;
 
-// Only start server in development (not in production/Vercel)
 if (process.env.NODE_ENV !== 'production') {
     app.listen(port, () => {
-        console.log("server started");
+        console.log(`Server started on port ${port}`);
     });
 }

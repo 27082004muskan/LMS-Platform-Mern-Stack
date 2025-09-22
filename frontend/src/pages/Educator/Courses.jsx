@@ -1,36 +1,46 @@
-import React, { useEffect } from 'react'
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
-import img from "../../assets/empty.jpg";
-import { FaEdit } from "react-icons/fa";
-import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import React, { useEffect } from 'react';
+import { FaEdit } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { serverUrl } from '../../App';
-import { setCreatorCourseData } from '../../redux/courseSlice';
+import img from "../../assets/empty.jpg";
+import { setCreatorCourseData, setLoading } from '../../redux/courseSlice';
 // import getCreatorCourse from '../../customHooks/getCreatorCourse';
 
 const Courses = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {userData} = useSelector(state => state.user);
-  const { creatorCourseData } = useSelector(state => state.course);
+  const { creatorCourseData, loading } = useSelector(state => state.course);
   // getCreatorCourse()
 
   // Fetch creator courses on component mount
 useEffect(() => {
+  // Only fetch if user is authenticated
+  if (!userData?._id) {
+    console.log('User not authenticated, skipping courses fetch');
+    return;
+  }
+
   const creatorCourses = async () => {
     try {
+      dispatch(setLoading(true));
       const result = await axios.get(serverUrl + "/api/course/getcreator", { withCredentials: true });
       console.log("Course data:", result.data); // Add this to see the data
       console.log("First course isPublished:", result.data[0]?.isPublished, typeof result.data[0]?.isPublished); // Debug line
       dispatch(setCreatorCourseData(result.data));
     } catch (error) {
       console.log(error);
+      dispatch(setCreatorCourseData([])); // Set empty array on error
+    } finally {
+      dispatch(setLoading(false));
     }
   };
   
   creatorCourses();
-}, [userData, dispatch]); // Add dispatch here
+}, [userData?._id, dispatch]); // Only depend on user ID to prevent unnecessary re-renders
 
 
   return (
@@ -49,18 +59,24 @@ useEffect(() => {
 
         {/* FOR LARGE SCREEN TABLE */}
         <div className='hidden md:block bg-white rounded-xl shadow p-4 overflow-x-auto'>
-          <table className='min-w-full text-sm'>
-            <thead className='border-b bg-gray-50'>
-              <tr>
-                <th className='text-left py-3 px-4'>Courses</th>
-                <th className='text-left py-3 px-4'>Price</th>
-                <th className='text-left py-3 px-4'>Status</th>
-                <th className='text-left py-3 px-4'>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                creatorCourseData.map((course, index) => (
+          {loading ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              <span className="ml-2 text-gray-600">Loading courses...</span>
+            </div>
+          ) : (
+            <table className='min-w-full text-sm'>
+              <thead className='border-b bg-gray-50'>
+                <tr>
+                  <th className='text-left py-3 px-4'>Courses</th>
+                  <th className='text-left py-3 px-4'>Price</th>
+                  <th className='text-left py-3 px-4'>Status</th>
+                  <th className='text-left py-3 px-4'>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  creatorCourseData && creatorCourseData.length > 0 ? creatorCourseData.map((course, index) => (
                   <tr key={index} className='border-b hover:bg-gray-50 transition duration-200'>
                     <td className='py-3 px-4 flex items-center gap-4'>
                       {course?.thumbnail?<img src={course?.thumbnail} className='w-25 h-14 object-cover rounded-md' alt={course.title} />:<img src={img} className='w-25 h-14 object-cover rounded-md' alt={course?.title} />}
@@ -87,15 +103,27 @@ useEffect(() => {
                     </td>
                   </tr>
                
-              ))}
-            </tbody>
-          </table>
+              )) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-8 text-gray-500">
+                    No courses found. Create your first course!
+                  </td>
+                </tr>
+              )}
+              </tbody>
+            </table>
+          )}
           <p className='text-center text-sm text-gray-400 mt-6'>A list of your recent courses.</p>
         </div>
 
         {/* FOR SMALL SCREEN TABLE */}
         <div className='md:hidden space-y-4'>
-          {creatorCourseData && creatorCourseData.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              <span className="ml-2 text-gray-600">Loading courses...</span>
+            </div>
+          ) : creatorCourseData && creatorCourseData.length > 0 ? (
             creatorCourseData.map((course, index) => (
               <div key={course._id || index} className='bg-white rounded-lg shadow p-4 flex flex-col gap-3'>
                 <div className='flex gap-4 items-center'>

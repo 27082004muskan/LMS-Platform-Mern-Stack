@@ -1,16 +1,16 @@
+import axios from "axios";
+import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
-import Google from "../assets/google.jpg";
-import logo from "../assets/logo1.jpg";
-import axios from "axios";
-import { serverUrl } from "../App";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userSlice";
-import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../utils/firebase";
+import { serverUrl } from "../App";
+import Google from "../assets/google.jpg";
+import logo from "../assets/logo1.jpg";
+import { setUserData } from "../redux/userSlice";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -59,7 +59,17 @@ toast.error(error.response.data.message)
     
   } catch (error) {
     console.error("Google Sign-In Error:", error);
-    toast.error(error.response.data.message);
+    
+    // Handle different types of errors
+    if (error.code === 'auth/popup-closed-by-user') {
+      toast.error("Sign-in cancelled by user");
+    } else if (error.response?.data?.message) {
+      toast.error(error.response.data.message);
+    } else if (error.message) {
+      toast.error(error.message);
+    } else {
+      toast.error("An error occurred during sign-in");
+    }
   }
 };
 

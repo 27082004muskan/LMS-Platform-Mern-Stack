@@ -1,29 +1,30 @@
 
-import { Navigate, Route ,Routes} from 'react-router-dom'
-import './App.css'
-import Home from "./pages/Home.jsx";
-import SignUp from "./pages/SignUp";
-import Login from './pages/Login';
-import { ToastContainer } from 'react-toastify';
-import getCurrentUser from './customHooks/getCurrentUser.js';
 import { useSelector } from 'react-redux';
-import Profile from './pages/Profile.jsx';
-import ForgetPassword from './pages/ForgetPassword.jsx';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import './App.css';
+import useGetCreatorCourses from './customHooks/getCreatorCourse.js';
+import useGetCurrentUser from './customHooks/getCurrentUser.js';
+import useGetPublishedCourse from './customHooks/getPublishedCourse.js';
+import AllCourses from './pages/AllCourses.jsx';
 import EditProfile from './pages/EditProfile.jsx';
-import Dashboard from './pages/Educator/Dashboard.jsx';
 import Courses from './pages/Educator/Courses.jsx';
 import CreateCourses from './pages/Educator/CreateCourses.jsx';
-import getCreatorCourse from './customHooks/getCreatorCourse.js';
+import Dashboard from './pages/Educator/Dashboard.jsx';
 import EditCourses from './pages/Educator/EditCourses.jsx';
-import getPublishedCourse from './customHooks/getPublishedCourse.js';
-import AllCourses from './pages/AllCourses.jsx';
+import ForgetPassword from './pages/ForgetPassword.jsx';
+import Home from "./pages/Home.jsx";
+import Login from './pages/Login';
+import Profile from './pages/Profile.jsx';
+import SignUp from "./pages/SignUp";
 
 
 export const serverUrl="http://localhost:8000"
 function App() {
- getCurrentUser()
- getCreatorCourse()
- getPublishedCourse()
+ // Call hooks inside the component
+ useGetCurrentUser()
+ useGetCreatorCourses()
+ useGetPublishedCourse()
  const {userData}=useSelector(state=>state.user)
 
   return (

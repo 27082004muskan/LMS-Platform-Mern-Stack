@@ -1,10 +1,10 @@
 import axios from 'axios'
-import React, { useEffect } from 'react'
-import { serverUrl } from '../App'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { serverUrl } from '../App'
 import { setCourseData } from '../redux/courseSlice'
 
-const getPublishedCourse = () => {
+const useGetPublishedCourse = () => {
   
  // eslint-disable-next-line react-hooks/rules-of-hooks
     const dispatch=useDispatch()
@@ -25,4 +25,4 @@ console.log(result.data)
   )
 }
 
-export default getPublishedCourse
+export default useGetPublishedCourse

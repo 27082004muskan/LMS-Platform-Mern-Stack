@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { setUserData } from '../redux/userSlice'
 import { serverUrl } from '../App'
+import { setUserData } from '../redux/userSlice'
 
 // ✅ Custom hook
 const useGetCurrentUser = () => {
@@ -17,8 +17,14 @@ const useGetCurrentUser = () => {
         );
         dispatch(setUserData(result.data));
       } catch (error) {
-        console.log(error);
-        dispatch(setUserData(null));
+        console.log('Authentication error:', error);
+        // Only set userData to null if it's a 401 error (unauthorized)
+        if (error.response?.status === 401) {
+          console.log('User not authenticated');
+          dispatch(setUserData(null));
+        } else {
+          console.log('Other error occurred:', error.message);
+        }
       }
     };
 
