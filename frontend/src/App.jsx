@@ -19,7 +19,7 @@ import Profile from './pages/Profile.jsx';
 import SignUp from "./pages/SignUp";
 
 
-export const serverUrl="http://localhost:8000"
+
 function App() {
  // Call hooks inside the component
  useGetCurrentUser()
